@@ -1,0 +1,46 @@
+- name: install dependencies
+  package:
+    name: '{{ item }}'
+    state: latest
+  with_items:
+  - git
+  - autoconf
+  - libtool
+  - libdaemon-dev
+  - libasound2-dev
+  - libpopt-dev
+  - libconfig-dev
+  - avahi-daemon
+  - libavahi-client-dev
+  - libssl-dev
+  register: deps
+
+- name: git clone
+  git:
+    depth: 1
+    dest: /usr/src/shairport-sync
+    repo: https://github.com/mikebrady/shairport-sync.git
+  register: git
+
+- name: create user
+  user:
+    name: shairport-sync
+    groups: audio
+    append: yes
+    state: present
+
+- name: compile
+  script: compile.sh
+
+- name: create config
+  copy:
+    content: '{{ conf }}'
+    dest: /etc/shairport-sync.conf
+    mode: '0644'
+
+- name: start service
+  service:
+    name: shairport-sync
+    enabled: yes
+    state: restarted
+
