@@ -31,16 +31,19 @@
 
 - name: compile
   script: compile.sh
+  when: deps.changed or git.changed
+  notify: restart shairport-sync
 
 - name: create config
   copy:
     content: '{{ conf }}'
     dest: /etc/shairport-sync.conf
     mode: '0644'
+  notify: restart shairport-sync
 
-- name: start service
+- name: ensure service is started on boot
   service:
     name: shairport-sync
     enabled: yes
-    state: restarted
+    state: started
 
