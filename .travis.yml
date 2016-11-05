@@ -7,7 +7,7 @@ services:
 
 env:
   - distribution: ubuntu
-    version: 14.04
+    version: 16.04
     init: /sbin/init
     run_opts: ""
 
