@@ -6,8 +6,8 @@ services:
   - docker
 
 env:
-  - distribution: ubuntu
-    version: 16.04
+  - distribution: debian
+    version: jessie
     init: /sbin/init
     run_opts: ""
 
